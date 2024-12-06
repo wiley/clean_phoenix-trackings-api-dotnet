@@ -1,0 +1,89 @@
+# Default values for phoenix-trackings-api
+# This file is in YAML format
+# Declared variables to be passed into $/templates files
+
+appName: tracking-api
+namespace: phoenix-prod
+
+image:
+  repository: 988207228673.dkr.ecr.eu-central-1.amazonaws.com/phoenix-tracking-api
+  tag: prod
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+service:
+  type: NodePort
+  port: 80
+
+ingress:
+  external:
+    sslRedirect: "false"
+    forceSslRedirect: "false"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+# replicacount has no impact if autoscaling.enabled = true
+replicacount: 1
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 15
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 85
+
+dns:
+  internal: prod.sgp.private.wiley.host
+  external: prod.sgp.wiley.host
+
+env_vars:
+  data:
+    LOG_JSON: "true"
+    LOG_MINIMUMLEVEL: Information
+    MONGO_DB_NAME: phoenix-trackings-api
+    MONGO_TLS_CA_FILE_PATH: "/cert/global-bundle.pem"
+    USERS_API_BASE_URL: "http://users-api"
+    COMPANY_API_BASE_URL: "http://company-api"
+    CONTENT_API_BASE_URL: "http://contents-api"
+    ENROLLMENT_API_BASE_URL: "http://enrollments-api"
+    ENTITLEMENT_API_BASE_URL: "http://entitlements-api"
+    KEYCLOAK_BASE_URL: "https://keycloak.prod.sgp.wiley.host"
+    KEYCLOAK_REALM: "phoenix"
+    KEYCLOAK_AUDIENCE: "account"
+    OPA_BASE_URL: "http://opa/"
+    KAFKA_HOST: "b-1.eksprodeu.5cp134.c8.kafka.eu-central-1.amazonaws.com:9092,b-2.eksprodeu.5cp134.c8.kafka.eu-central-1.amazonaws.com:9092"
+    KAFKA_TOPIC: "ck-phoenix-tracking"
+
+externalsecrets:
+  refreshInterval: 1m
+  secretCreationPolicy: Owner
+  secretStoreName: eks-prod-eu-secret-manager
+  secretStoreType: ClusterSecretStore
+  data:
+  - keyValue: eks/phoenix
+    nameValue: USERS_API_KEY
+    propertyValue: USERS_API_KEY
+  - keyValue: eks/phoenix
+    nameValue: COMPANY_API_KEY
+    propertyValue: COMPANY_API_KEY
+  - keyValue: eks/phoenix
+    nameValue: CONTENTS_API_KEY
+    propertyValue: CONTENTS_API_KEY
+  - keyValue: eks/phoenix
+    nameValue: ENROLLMENTS_API_KEY
+    propertyValue: ENROLLMENTS_API_KEY
+  - keyValue: eks/phoenix
+    nameValue: ENTITLEMENTS_API_KEY
+    propertyValue: ENTITLEMENTS_API_KEY
+  - keyValue: eks/phoenix
+    nameValue: API_KEY
+    propertyValue: TRACKINGS_API_KEY
+  - keyValue: eks/phoenix
+    nameValue: MONGO_CONNECTION_STRING
+    propertyValue: TRACKINGS_API_MONGO_CONNECTION_STRING

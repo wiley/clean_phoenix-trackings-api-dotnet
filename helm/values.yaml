@@ -1,0 +1,31 @@
+########################################################################################################################
+# WARNING - this is a global scope file, where any value changed will be effective in all environments, if you want to
+# do some customization in just one environment, please use the files in value-files folder.
+########################################################################################################################
+
+appName: tracking-api
+
+imagePullSecrets: []
+
+service:
+  type: NodePort
+  port: 8000
+
+liveness:
+  path: /healthz
+  periodSeconds: 10
+  timeoutSeconds: 2
+
+startup:
+  path: /healthz
+  failureThreshold: 12
+  periodSeconds: 5
+
+# ingressType possible values: nginx(points to external ingress controller), nginx-internal(private-only ingress-controller)
+ingress:
+  client_max_body_size: 10m
+  ingressType: nginx
+
+# If isCloudFlareProxied is true, it will enable CloudFlare web application firewall
+externaldns:
+  isCloudFlareProxied: true

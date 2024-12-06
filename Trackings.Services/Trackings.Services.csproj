@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="DarwinAuthorization" Version="1.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.1" />
+    <PackageReference Include="WLS.KafkaMessenger" Version="5.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Trackings.Domain\Trackings.Domain.csproj" />
+    <ProjectReference Include="..\Trackings.Infrastructure.Interface\Trackings.Infrastructure.Interface.csproj" />
+  </ItemGroup>
+
+</Project>

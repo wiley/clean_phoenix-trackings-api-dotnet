@@ -1,0 +1,23 @@
+#Note: the self-sign certificate must be create only for private qe envs.
+{{- if .Values.private_certs -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "{{ .Values.appName }}"
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: wild-card-tls
+  commonName: "{{ .Values.appName }}.{{ .Values.dns.internal }}"
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+  duration: 8760h # 365d
+  renewBefore: 360h # 15d
+  dnsNames:
+  - "{{ .Values.appName }}.{{ .Values.dns.internal }}"
+  issuerRef:
+    name:  ca-issuer
+    kind: ClusterIssuer
+
+{{- end }}
